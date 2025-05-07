@@ -1,0 +1,19 @@
+﻿using System.Windows;
+
+namespace MidtermsProject
+{
+    public partial class StudentWindow : Window
+    {
+        public StudentWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            var loginWindow = new MainWindow();
+            loginWindow.Show();
+            this.Close();
+        }
+    }
+}
