@@ -22,7 +22,7 @@ namespace MidtermsProject
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="MIDTERMPROJECT")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="MidtermProject")]
 	public partial class LibraryDataContextDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -33,6 +33,9 @@ namespace MidtermsProject
     partial void InsertBook(Book instance);
     partial void UpdateBook(Book instance);
     partial void DeleteBook(Book instance);
+    partial void InsertBookState(BookState instance);
+    partial void UpdateBookState(BookState instance);
+    partial void DeleteBookState(BookState instance);
     partial void InsertBorrowTransaction(BorrowTransaction instance);
     partial void UpdateBorrowTransaction(BorrowTransaction instance);
     partial void DeleteBorrowTransaction(BorrowTransaction instance);
@@ -54,13 +57,19 @@ namespace MidtermsProject
     partial void InsertStudent(Student instance);
     partial void UpdateStudent(Student instance);
     partial void DeleteStudent(Student instance);
+    partial void InsertTransactionStatus(TransactionStatus instance);
+    partial void UpdateTransactionStatus(TransactionStatus instance);
+    partial void DeleteTransactionStatus(TransactionStatus instance);
     partial void Insertusers_table(users_table instance);
     partial void Updateusers_table(users_table instance);
     partial void Deleteusers_table(users_table instance);
+    partial void InsertNotification(Notification instance);
+    partial void UpdateNotification(Notification instance);
+    partial void DeleteNotification(Notification instance);
     #endregion
 		
 		public LibraryDataContextDataContext() : 
-				base(global::MidtermsProject.Properties.Settings.Default.MIDTERMPROJECTConnectionString, mappingSource)
+				base(global::MidtermsProject.Properties.Settings.Default.MidtermProjectConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -94,6 +103,14 @@ namespace MidtermsProject
 			get
 			{
 				return this.GetTable<Book>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BookState> BookStates
+		{
+			get
+			{
+				return this.GetTable<BookState>();
 			}
 		}
 		
@@ -153,11 +170,27 @@ namespace MidtermsProject
 			}
 		}
 		
+		public System.Data.Linq.Table<TransactionStatus> TransactionStatus
+		{
+			get
+			{
+				return this.GetTable<TransactionStatus>();
+			}
+		}
+		
 		public System.Data.Linq.Table<users_table> users_tables
 		{
 			get
 			{
 				return this.GetTable<users_table>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Notification> Notifications
+		{
+			get
+			{
+				return this.GetTable<Notification>();
 			}
 		}
 	}
@@ -168,11 +201,13 @@ namespace MidtermsProject
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _BookID;
+		private string _BookID;
 		
-		private System.Nullable<int> _GenreID;
+		private string _GenreID;
 		
-		private System.Nullable<int> _ISBNID;
+		private string _ISBNID;
+		
+		private string _BookStateID;
 		
 		private string _Title;
 		
@@ -184,6 +219,8 @@ namespace MidtermsProject
 		
 		private EntitySet<BorrowTransaction> _BorrowTransactions;
 		
+		private EntityRef<BookState> _BookState;
+		
 		private EntityRef<Genre> _Genre;
 		
 		private EntityRef<ISBN> _ISBN;
@@ -192,12 +229,14 @@ namespace MidtermsProject
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnBookIDChanging(int value);
+    partial void OnBookIDChanging(string value);
     partial void OnBookIDChanged();
-    partial void OnGenreIDChanging(System.Nullable<int> value);
+    partial void OnGenreIDChanging(string value);
     partial void OnGenreIDChanged();
-    partial void OnISBNIDChanging(System.Nullable<int> value);
+    partial void OnISBNIDChanging(string value);
     partial void OnISBNIDChanged();
+    partial void OnBookStateIDChanging(string value);
+    partial void OnBookStateIDChanged();
     partial void OnTitleChanging(string value);
     partial void OnTitleChanged();
     partial void OnAuthorChanging(string value);
@@ -211,13 +250,14 @@ namespace MidtermsProject
 		public Book()
 		{
 			this._BorrowTransactions = new EntitySet<BorrowTransaction>(new Action<BorrowTransaction>(this.attach_BorrowTransactions), new Action<BorrowTransaction>(this.detach_BorrowTransactions));
+			this._BookState = default(EntityRef<BookState>);
 			this._Genre = default(EntityRef<Genre>);
 			this._ISBN = default(EntityRef<ISBN>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int BookID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string BookID
 		{
 			get
 			{
@@ -236,8 +276,8 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GenreID", DbType="Int")]
-		public System.Nullable<int> GenreID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GenreID", DbType="VarChar(50)")]
+		public string GenreID
 		{
 			get
 			{
@@ -260,8 +300,8 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ISBNID", DbType="Int")]
-		public System.Nullable<int> ISBNID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ISBNID", DbType="VarChar(50)")]
+		public string ISBNID
 		{
 			get
 			{
@@ -284,7 +324,31 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="VarChar(255)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookStateID", DbType="VarChar(50)")]
+		public string BookStateID
+		{
+			get
+			{
+				return this._BookStateID;
+			}
+			set
+			{
+				if ((this._BookStateID != value))
+				{
+					if (this._BookState.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBookStateIDChanging(value);
+					this.SendPropertyChanging();
+					this._BookStateID = value;
+					this.SendPropertyChanged("BookStateID");
+					this.OnBookStateIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
 		public string Title
 		{
 			get
@@ -304,7 +368,7 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Author", DbType="VarChar(255)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Author", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
 		public string Author
 		{
 			get
@@ -377,6 +441,40 @@ namespace MidtermsProject
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BookState_Book", Storage="_BookState", ThisKey="BookStateID", OtherKey="BookStateID", IsForeignKey=true)]
+		public BookState BookState
+		{
+			get
+			{
+				return this._BookState.Entity;
+			}
+			set
+			{
+				BookState previousValue = this._BookState.Entity;
+				if (((previousValue != value) 
+							|| (this._BookState.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BookState.Entity = null;
+						previousValue.Books.Remove(this);
+					}
+					this._BookState.Entity = value;
+					if ((value != null))
+					{
+						value.Books.Add(this);
+						this._BookStateID = value.BookStateID;
+					}
+					else
+					{
+						this._BookStateID = default(string);
+					}
+					this.SendPropertyChanged("BookState");
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Genre_Book", Storage="_Genre", ThisKey="GenreID", OtherKey="GenreID", IsForeignKey=true)]
 		public Genre Genre
 		{
@@ -404,7 +502,7 @@ namespace MidtermsProject
 					}
 					else
 					{
-						this._GenreID = default(Nullable<int>);
+						this._GenreID = default(string);
 					}
 					this.SendPropertyChanged("Genre");
 				}
@@ -438,7 +536,7 @@ namespace MidtermsProject
 					}
 					else
 					{
-						this._ISBNID = default(Nullable<int>);
+						this._ISBNID = default(string);
 					}
 					this.SendPropertyChanged("ISBN");
 				}
@@ -478,17 +576,133 @@ namespace MidtermsProject
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.BookStates")]
+	public partial class BookState : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _BookStateID;
+		
+		private string _BookState1;
+		
+		private EntitySet<Book> _Books;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnBookStateIDChanging(string value);
+    partial void OnBookStateIDChanged();
+    partial void OnBookState1Changing(string value);
+    partial void OnBookState1Changed();
+    #endregion
+		
+		public BookState()
+		{
+			this._Books = new EntitySet<Book>(new Action<Book>(this.attach_Books), new Action<Book>(this.detach_Books));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookStateID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string BookStateID
+		{
+			get
+			{
+				return this._BookStateID;
+			}
+			set
+			{
+				if ((this._BookStateID != value))
+				{
+					this.OnBookStateIDChanging(value);
+					this.SendPropertyChanging();
+					this._BookStateID = value;
+					this.SendPropertyChanged("BookStateID");
+					this.OnBookStateIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="BookState", Storage="_BookState1", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string BookState1
+		{
+			get
+			{
+				return this._BookState1;
+			}
+			set
+			{
+				if ((this._BookState1 != value))
+				{
+					this.OnBookState1Changing(value);
+					this.SendPropertyChanging();
+					this._BookState1 = value;
+					this.SendPropertyChanged("BookState1");
+					this.OnBookState1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BookState_Book", Storage="_Books", ThisKey="BookStateID", OtherKey="BookStateID")]
+		public EntitySet<Book> Books
+		{
+			get
+			{
+				return this._Books;
+			}
+			set
+			{
+				this._Books.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Books(Book entity)
+		{
+			this.SendPropertyChanging();
+			entity.BookState = this;
+		}
+		
+		private void detach_Books(Book entity)
+		{
+			this.SendPropertyChanging();
+			entity.BookState = null;
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.BorrowTransactions")]
 	public partial class BorrowTransaction : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _TransactionID;
+		private string _TransactionID;
 		
-		private System.Nullable<int> _StudentID;
+		private string _StudentID;
 		
-		private System.Nullable<int> _BookID;
+		private string _BookID;
+		
+		private string _StatusID;
 		
 		private System.Nullable<System.DateTime> _BorrowDate;
 		
@@ -500,16 +714,20 @@ namespace MidtermsProject
 		
 		private EntityRef<Student> _Student;
 		
+		private EntityRef<TransactionStatus> _TransactionStatus;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnTransactionIDChanging(int value);
+    partial void OnTransactionIDChanging(string value);
     partial void OnTransactionIDChanged();
-    partial void OnStudentIDChanging(System.Nullable<int> value);
+    partial void OnStudentIDChanging(string value);
     partial void OnStudentIDChanged();
-    partial void OnBookIDChanging(System.Nullable<int> value);
+    partial void OnBookIDChanging(string value);
     partial void OnBookIDChanged();
+    partial void OnStatusIDChanging(string value);
+    partial void OnStatusIDChanged();
     partial void OnBorrowDateChanging(System.Nullable<System.DateTime> value);
     partial void OnBorrowDateChanged();
     partial void OnReturnDateChanging(System.Nullable<System.DateTime> value);
@@ -521,11 +739,12 @@ namespace MidtermsProject
 			this._Fines = new EntitySet<Fine>(new Action<Fine>(this.attach_Fines), new Action<Fine>(this.detach_Fines));
 			this._Book = default(EntityRef<Book>);
 			this._Student = default(EntityRef<Student>);
+			this._TransactionStatus = default(EntityRef<TransactionStatus>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransactionID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int TransactionID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransactionID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string TransactionID
 		{
 			get
 			{
@@ -544,8 +763,8 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StudentID", DbType="Int")]
-		public System.Nullable<int> StudentID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StudentID", DbType="VarChar(50)")]
+		public string StudentID
 		{
 			get
 			{
@@ -568,8 +787,8 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookID", DbType="Int")]
-		public System.Nullable<int> BookID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookID", DbType="VarChar(50)")]
+		public string BookID
 		{
 			get
 			{
@@ -588,6 +807,30 @@ namespace MidtermsProject
 					this._BookID = value;
 					this.SendPropertyChanged("BookID");
 					this.OnBookIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StatusID", DbType="VarChar(50)")]
+		public string StatusID
+		{
+			get
+			{
+				return this._StatusID;
+			}
+			set
+			{
+				if ((this._StatusID != value))
+				{
+					if (this._TransactionStatus.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnStatusIDChanging(value);
+					this.SendPropertyChanging();
+					this._StatusID = value;
+					this.SendPropertyChanged("StatusID");
+					this.OnStatusIDChanged();
 				}
 			}
 		}
@@ -672,7 +915,7 @@ namespace MidtermsProject
 					}
 					else
 					{
-						this._BookID = default(Nullable<int>);
+						this._BookID = default(string);
 					}
 					this.SendPropertyChanged("Book");
 				}
@@ -706,9 +949,43 @@ namespace MidtermsProject
 					}
 					else
 					{
-						this._StudentID = default(Nullable<int>);
+						this._StudentID = default(string);
 					}
 					this.SendPropertyChanged("Student");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TransactionStatus_BorrowTransaction", Storage="_TransactionStatus", ThisKey="StatusID", OtherKey="StatusID", IsForeignKey=true)]
+		public TransactionStatus TransactionStatus
+		{
+			get
+			{
+				return this._TransactionStatus.Entity;
+			}
+			set
+			{
+				TransactionStatus previousValue = this._TransactionStatus.Entity;
+				if (((previousValue != value) 
+							|| (this._TransactionStatus.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TransactionStatus.Entity = null;
+						previousValue.BorrowTransactions.Remove(this);
+					}
+					this._TransactionStatus.Entity = value;
+					if ((value != null))
+					{
+						value.BorrowTransactions.Add(this);
+						this._StatusID = value.StatusID;
+					}
+					else
+					{
+						this._StatusID = default(string);
+					}
+					this.SendPropertyChanged("TransactionStatus");
 				}
 			}
 		}
@@ -752,7 +1029,7 @@ namespace MidtermsProject
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _CourseID;
+		private string _CourseID;
 		
 		private string _CourseName;
 		
@@ -762,7 +1039,7 @@ namespace MidtermsProject
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnCourseIDChanging(int value);
+    partial void OnCourseIDChanging(string value);
     partial void OnCourseIDChanged();
     partial void OnCourseNameChanging(string value);
     partial void OnCourseNameChanged();
@@ -774,8 +1051,8 @@ namespace MidtermsProject
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CourseID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int CourseID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CourseID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string CourseID
 		{
 			get
 			{
@@ -794,7 +1071,7 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CourseName", DbType="VarChar(255)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CourseName", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
 		public string CourseName
 		{
 			get
@@ -866,9 +1143,9 @@ namespace MidtermsProject
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _FineID;
+		private string _FineID;
 		
-		private System.Nullable<int> _TransactionID;
+		private string _TransactionID;
 		
 		private System.Nullable<int> _DaysLate;
 		
@@ -880,9 +1157,9 @@ namespace MidtermsProject
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnFineIDChanging(int value);
+    partial void OnFineIDChanging(string value);
     partial void OnFineIDChanged();
-    partial void OnTransactionIDChanging(System.Nullable<int> value);
+    partial void OnTransactionIDChanging(string value);
     partial void OnTransactionIDChanged();
     partial void OnDaysLateChanging(System.Nullable<int> value);
     partial void OnDaysLateChanged();
@@ -896,8 +1173,8 @@ namespace MidtermsProject
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FineID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int FineID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FineID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string FineID
 		{
 			get
 			{
@@ -916,8 +1193,8 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransactionID", DbType="Int")]
-		public System.Nullable<int> TransactionID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransactionID", DbType="VarChar(50)")]
+		public string TransactionID
 		{
 			get
 			{
@@ -1007,7 +1284,7 @@ namespace MidtermsProject
 					}
 					else
 					{
-						this._TransactionID = default(Nullable<int>);
+						this._TransactionID = default(string);
 					}
 					this.SendPropertyChanged("BorrowTransaction");
 				}
@@ -1041,7 +1318,7 @@ namespace MidtermsProject
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _GenreID;
+		private string _GenreID;
 		
 		private string _GenreName;
 		
@@ -1051,7 +1328,7 @@ namespace MidtermsProject
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnGenreIDChanging(int value);
+    partial void OnGenreIDChanging(string value);
     partial void OnGenreIDChanged();
     partial void OnGenreNameChanging(string value);
     partial void OnGenreNameChanged();
@@ -1063,8 +1340,8 @@ namespace MidtermsProject
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GenreID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int GenreID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GenreID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string GenreID
 		{
 			get
 			{
@@ -1083,7 +1360,7 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GenreName", DbType="VarChar(255)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GenreName", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
 		public string GenreName
 		{
 			get
@@ -1155,7 +1432,7 @@ namespace MidtermsProject
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _ISBNID;
+		private string _ISBNID;
 		
 		private string _ISBN1;
 		
@@ -1165,7 +1442,7 @@ namespace MidtermsProject
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnISBNIDChanging(int value);
+    partial void OnISBNIDChanging(string value);
     partial void OnISBNIDChanged();
     partial void OnISBN1Changing(string value);
     partial void OnISBN1Changed();
@@ -1177,8 +1454,8 @@ namespace MidtermsProject
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ISBNID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int ISBNID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ISBNID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string ISBNID
 		{
 			get
 			{
@@ -1197,7 +1474,7 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="ISBN", Storage="_ISBN1", DbType="VarChar(20)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="ISBN", Storage="_ISBN1", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
 		public string ISBN1
 		{
 			get
@@ -1269,9 +1546,9 @@ namespace MidtermsProject
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _VisitID;
+		private string _VisitID;
 		
-		private System.Nullable<int> _StudentID;
+		private string _StudentID;
 		
 		private System.Nullable<System.DateTime> _VisitDate;
 		
@@ -1281,9 +1558,9 @@ namespace MidtermsProject
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnVisitIDChanging(int value);
+    partial void OnVisitIDChanging(string value);
     partial void OnVisitIDChanged();
-    partial void OnStudentIDChanging(System.Nullable<int> value);
+    partial void OnStudentIDChanging(string value);
     partial void OnStudentIDChanged();
     partial void OnVisitDateChanging(System.Nullable<System.DateTime> value);
     partial void OnVisitDateChanged();
@@ -1295,8 +1572,8 @@ namespace MidtermsProject
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VisitID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int VisitID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VisitID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string VisitID
 		{
 			get
 			{
@@ -1315,8 +1592,8 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StudentID", DbType="Int")]
-		public System.Nullable<int> StudentID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StudentID", DbType="VarChar(50)")]
+		public string StudentID
 		{
 			get
 			{
@@ -1386,7 +1663,7 @@ namespace MidtermsProject
 					}
 					else
 					{
-						this._StudentID = default(Nullable<int>);
+						this._StudentID = default(string);
 					}
 					this.SendPropertyChanged("Student");
 				}
@@ -1420,9 +1697,9 @@ namespace MidtermsProject
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _StudentID;
+		private string _StudentID;
 		
-		private System.Nullable<int> _CourseID;
+		private string _CourseID;
 		
 		private string _Name;
 		
@@ -1430,23 +1707,21 @@ namespace MidtermsProject
 		
 		private string _ContactNumber;
 		
-		private string _UserID;
-		
 		private EntitySet<BorrowTransaction> _BorrowTransactions;
 		
 		private EntitySet<LibraryVisit> _LibraryVisits;
 		
-		private EntityRef<Course> _Course;
+		private EntitySet<users_table> _users_tables;
 		
-		private EntityRef<users_table> _users_table;
+		private EntityRef<Course> _Course;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnStudentIDChanging(int value);
+    partial void OnStudentIDChanging(string value);
     partial void OnStudentIDChanged();
-    partial void OnCourseIDChanging(System.Nullable<int> value);
+    partial void OnCourseIDChanging(string value);
     partial void OnCourseIDChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
@@ -1454,21 +1729,19 @@ namespace MidtermsProject
     partial void OnAddressChanged();
     partial void OnContactNumberChanging(string value);
     partial void OnContactNumberChanged();
-    partial void OnUserIDChanging(string value);
-    partial void OnUserIDChanged();
     #endregion
 		
 		public Student()
 		{
 			this._BorrowTransactions = new EntitySet<BorrowTransaction>(new Action<BorrowTransaction>(this.attach_BorrowTransactions), new Action<BorrowTransaction>(this.detach_BorrowTransactions));
 			this._LibraryVisits = new EntitySet<LibraryVisit>(new Action<LibraryVisit>(this.attach_LibraryVisits), new Action<LibraryVisit>(this.detach_LibraryVisits));
+			this._users_tables = new EntitySet<users_table>(new Action<users_table>(this.attach_users_tables), new Action<users_table>(this.detach_users_tables));
 			this._Course = default(EntityRef<Course>);
-			this._users_table = default(EntityRef<users_table>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StudentID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int StudentID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StudentID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string StudentID
 		{
 			get
 			{
@@ -1487,8 +1760,8 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CourseID", DbType="Int")]
-		public System.Nullable<int> CourseID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CourseID", DbType="VarChar(50)")]
+		public string CourseID
 		{
 			get
 			{
@@ -1511,7 +1784,7 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(255)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -1531,7 +1804,7 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="VarChar(255)")]
 		public string Address
 		{
 			get
@@ -1571,30 +1844,6 @@ namespace MidtermsProject
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="VarChar(50)")]
-		public string UserID
-		{
-			get
-			{
-				return this._UserID;
-			}
-			set
-			{
-				if ((this._UserID != value))
-				{
-					if (this._users_table.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIDChanging(value);
-					this.SendPropertyChanging();
-					this._UserID = value;
-					this.SendPropertyChanged("UserID");
-					this.OnUserIDChanged();
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Student_BorrowTransaction", Storage="_BorrowTransactions", ThisKey="StudentID", OtherKey="StudentID")]
 		public EntitySet<BorrowTransaction> BorrowTransactions
 		{
@@ -1618,6 +1867,19 @@ namespace MidtermsProject
 			set
 			{
 				this._LibraryVisits.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Student_users_table", Storage="_users_tables", ThisKey="StudentID", OtherKey="StudentID")]
+		public EntitySet<users_table> users_tables
+		{
+			get
+			{
+				return this._users_tables;
+			}
+			set
+			{
+				this._users_tables.Assign(value);
 			}
 		}
 		
@@ -1648,43 +1910,9 @@ namespace MidtermsProject
 					}
 					else
 					{
-						this._CourseID = default(Nullable<int>);
+						this._CourseID = default(string);
 					}
 					this.SendPropertyChanged("Course");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="users_table_Student", Storage="_users_table", ThisKey="UserID", OtherKey="UserID", IsForeignKey=true)]
-		public users_table users_table
-		{
-			get
-			{
-				return this._users_table.Entity;
-			}
-			set
-			{
-				users_table previousValue = this._users_table.Entity;
-				if (((previousValue != value) 
-							|| (this._users_table.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._users_table.Entity = null;
-						previousValue.Students.Remove(this);
-					}
-					this._users_table.Entity = value;
-					if ((value != null))
-					{
-						value.Students.Add(this);
-						this._UserID = value.UserID;
-					}
-					else
-					{
-						this._UserID = default(string);
-					}
-					this.SendPropertyChanged("users_table");
 				}
 			}
 		}
@@ -1732,134 +1960,98 @@ namespace MidtermsProject
 			this.SendPropertyChanging();
 			entity.Student = null;
 		}
+		
+		private void attach_users_tables(users_table entity)
+		{
+			this.SendPropertyChanging();
+			entity.Student = this;
+		}
+		
+		private void detach_users_tables(users_table entity)
+		{
+			this.SendPropertyChanging();
+			entity.Student = null;
+		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.users_tables")]
-	public partial class users_table : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TransactionStatus")]
+	public partial class TransactionStatus : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private string _UserID;
+		private string _StatusID;
 		
-		private string _UserPass;
+		private string _TransactionStatus1;
 		
-		private string _UserName;
-		
-		private string _UserRole;
-		
-		private EntitySet<Student> _Students;
+		private EntitySet<BorrowTransaction> _BorrowTransactions;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnUserIDChanging(string value);
-    partial void OnUserIDChanged();
-    partial void OnUserPassChanging(string value);
-    partial void OnUserPassChanged();
-    partial void OnUserNameChanging(string value);
-    partial void OnUserNameChanged();
-    partial void OnUserRoleChanging(string value);
-    partial void OnUserRoleChanged();
+    partial void OnStatusIDChanging(string value);
+    partial void OnStatusIDChanged();
+    partial void OnTransactionStatus1Changing(string value);
+    partial void OnTransactionStatus1Changed();
     #endregion
 		
-		public users_table()
+		public TransactionStatus()
 		{
-			this._Students = new EntitySet<Student>(new Action<Student>(this.attach_Students), new Action<Student>(this.detach_Students));
+			this._BorrowTransactions = new EntitySet<BorrowTransaction>(new Action<BorrowTransaction>(this.attach_BorrowTransactions), new Action<BorrowTransaction>(this.detach_BorrowTransactions));
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string UserID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StatusID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string StatusID
 		{
 			get
 			{
-				return this._UserID;
+				return this._StatusID;
 			}
 			set
 			{
-				if ((this._UserID != value))
+				if ((this._StatusID != value))
 				{
-					this.OnUserIDChanging(value);
+					this.OnStatusIDChanging(value);
 					this.SendPropertyChanging();
-					this._UserID = value;
-					this.SendPropertyChanged("UserID");
-					this.OnUserIDChanged();
+					this._StatusID = value;
+					this.SendPropertyChanged("StatusID");
+					this.OnStatusIDChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserPass", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string UserPass
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="TransactionStatus", Storage="_TransactionStatus1", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string TransactionStatus1
 		{
 			get
 			{
-				return this._UserPass;
+				return this._TransactionStatus1;
 			}
 			set
 			{
-				if ((this._UserPass != value))
+				if ((this._TransactionStatus1 != value))
 				{
-					this.OnUserPassChanging(value);
+					this.OnTransactionStatus1Changing(value);
 					this.SendPropertyChanging();
-					this._UserPass = value;
-					this.SendPropertyChanged("UserPass");
-					this.OnUserPassChanged();
+					this._TransactionStatus1 = value;
+					this.SendPropertyChanged("TransactionStatus1");
+					this.OnTransactionStatus1Changed();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string UserName
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TransactionStatus_BorrowTransaction", Storage="_BorrowTransactions", ThisKey="StatusID", OtherKey="StatusID")]
+		public EntitySet<BorrowTransaction> BorrowTransactions
 		{
 			get
 			{
-				return this._UserName;
+				return this._BorrowTransactions;
 			}
 			set
 			{
-				if ((this._UserName != value))
-				{
-					this.OnUserNameChanging(value);
-					this.SendPropertyChanging();
-					this._UserName = value;
-					this.SendPropertyChanged("UserName");
-					this.OnUserNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserRole", DbType="VarChar(20) NOT NULL", CanBeNull=false)]
-		public string UserRole
-		{
-			get
-			{
-				return this._UserRole;
-			}
-			set
-			{
-				if ((this._UserRole != value))
-				{
-					this.OnUserRoleChanging(value);
-					this.SendPropertyChanging();
-					this._UserRole = value;
-					this.SendPropertyChanged("UserRole");
-					this.OnUserRoleChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="users_table_Student", Storage="_Students", ThisKey="UserID", OtherKey="UserID")]
-		public EntitySet<Student> Students
-		{
-			get
-			{
-				return this._Students;
-			}
-			set
-			{
-				this._Students.Assign(value);
+				this._BorrowTransactions.Assign(value);
 			}
 		}
 		
@@ -1883,16 +2075,466 @@ namespace MidtermsProject
 			}
 		}
 		
-		private void attach_Students(Student entity)
+		private void attach_BorrowTransactions(BorrowTransaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.TransactionStatus = this;
+		}
+		
+		private void detach_BorrowTransactions(BorrowTransaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.TransactionStatus = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.users_tables")]
+	public partial class users_table : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _UserID;
+		
+		private string _UserPass;
+		
+		private string _UserName;
+		
+		private string _UserRole;
+		
+		private string _StudentID;
+		
+		private EntitySet<Notification> _Notifications;
+		
+		private EntityRef<Student> _Student;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUserIDChanging(string value);
+    partial void OnUserIDChanged();
+    partial void OnUserPassChanging(string value);
+    partial void OnUserPassChanged();
+    partial void OnUserNameChanging(string value);
+    partial void OnUserNameChanged();
+    partial void OnUserRoleChanging(string value);
+    partial void OnUserRoleChanged();
+    partial void OnStudentIDChanging(string value);
+    partial void OnStudentIDChanged();
+    #endregion
+		
+		public users_table()
+		{
+			this._Notifications = new EntitySet<Notification>(new Action<Notification>(this.attach_Notifications), new Action<Notification>(this.detach_Notifications));
+			this._Student = default(EntityRef<Student>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="NVarChar(20) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string UserID
+		{
+			get
+			{
+				return this._UserID;
+			}
+			set
+			{
+				if ((this._UserID != value))
+				{
+					this.OnUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._UserID = value;
+					this.SendPropertyChanged("UserID");
+					this.OnUserIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserPass", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string UserPass
+		{
+			get
+			{
+				return this._UserPass;
+			}
+			set
+			{
+				if ((this._UserPass != value))
+				{
+					this.OnUserPassChanging(value);
+					this.SendPropertyChanging();
+					this._UserPass = value;
+					this.SendPropertyChanged("UserPass");
+					this.OnUserPassChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this.OnUserNameChanging(value);
+					this.SendPropertyChanging();
+					this._UserName = value;
+					this.SendPropertyChanged("UserName");
+					this.OnUserNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserRole", DbType="NVarChar(20) NOT NULL", CanBeNull=false)]
+		public string UserRole
+		{
+			get
+			{
+				return this._UserRole;
+			}
+			set
+			{
+				if ((this._UserRole != value))
+				{
+					this.OnUserRoleChanging(value);
+					this.SendPropertyChanging();
+					this._UserRole = value;
+					this.SendPropertyChanged("UserRole");
+					this.OnUserRoleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StudentID", DbType="VarChar(50)")]
+		public string StudentID
+		{
+			get
+			{
+				return this._StudentID;
+			}
+			set
+			{
+				if ((this._StudentID != value))
+				{
+					if (this._Student.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnStudentIDChanging(value);
+					this.SendPropertyChanging();
+					this._StudentID = value;
+					this.SendPropertyChanged("StudentID");
+					this.OnStudentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="users_table_Notification", Storage="_Notifications", ThisKey="UserID", OtherKey="SenderID")]
+		public EntitySet<Notification> Notifications
+		{
+			get
+			{
+				return this._Notifications;
+			}
+			set
+			{
+				this._Notifications.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Student_users_table", Storage="_Student", ThisKey="StudentID", OtherKey="StudentID", IsForeignKey=true)]
+		public Student Student
+		{
+			get
+			{
+				return this._Student.Entity;
+			}
+			set
+			{
+				Student previousValue = this._Student.Entity;
+				if (((previousValue != value) 
+							|| (this._Student.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Student.Entity = null;
+						previousValue.users_tables.Remove(this);
+					}
+					this._Student.Entity = value;
+					if ((value != null))
+					{
+						value.users_tables.Add(this);
+						this._StudentID = value.StudentID;
+					}
+					else
+					{
+						this._StudentID = default(string);
+					}
+					this.SendPropertyChanged("Student");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Notifications(Notification entity)
 		{
 			this.SendPropertyChanging();
 			entity.users_table = this;
 		}
 		
-		private void detach_Students(Student entity)
+		private void detach_Notifications(Notification entity)
 		{
 			this.SendPropertyChanging();
 			entity.users_table = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Notifications")]
+	public partial class Notification : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _NotificationID;
+		
+		private string _SenderID;
+		
+		private string _RecipientRole;
+		
+		private string _Message;
+		
+		private System.DateTime _Timestamp;
+		
+		private System.Nullable<bool> _IsRead;
+		
+		private EntityRef<users_table> _users_table;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnNotificationIDChanging(int value);
+    partial void OnNotificationIDChanged();
+    partial void OnSenderIDChanging(string value);
+    partial void OnSenderIDChanged();
+    partial void OnRecipientRoleChanging(string value);
+    partial void OnRecipientRoleChanged();
+    partial void OnMessageChanging(string value);
+    partial void OnMessageChanged();
+    partial void OnTimestampChanging(System.DateTime value);
+    partial void OnTimestampChanged();
+    partial void OnIsReadChanging(System.Nullable<bool> value);
+    partial void OnIsReadChanged();
+    #endregion
+		
+		public Notification()
+		{
+			this._users_table = default(EntityRef<users_table>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NotificationID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int NotificationID
+		{
+			get
+			{
+				return this._NotificationID;
+			}
+			set
+			{
+				if ((this._NotificationID != value))
+				{
+					this.OnNotificationIDChanging(value);
+					this.SendPropertyChanging();
+					this._NotificationID = value;
+					this.SendPropertyChanged("NotificationID");
+					this.OnNotificationIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SenderID", DbType="NVarChar(20) NOT NULL", CanBeNull=false)]
+		public string SenderID
+		{
+			get
+			{
+				return this._SenderID;
+			}
+			set
+			{
+				if ((this._SenderID != value))
+				{
+					if (this._users_table.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSenderIDChanging(value);
+					this.SendPropertyChanging();
+					this._SenderID = value;
+					this.SendPropertyChanged("SenderID");
+					this.OnSenderIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecipientRole", DbType="NVarChar(20) NOT NULL", CanBeNull=false)]
+		public string RecipientRole
+		{
+			get
+			{
+				return this._RecipientRole;
+			}
+			set
+			{
+				if ((this._RecipientRole != value))
+				{
+					this.OnRecipientRoleChanging(value);
+					this.SendPropertyChanging();
+					this._RecipientRole = value;
+					this.SendPropertyChanged("RecipientRole");
+					this.OnRecipientRoleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Message", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Message
+		{
+			get
+			{
+				return this._Message;
+			}
+			set
+			{
+				if ((this._Message != value))
+				{
+					this.OnMessageChanging(value);
+					this.SendPropertyChanging();
+					this._Message = value;
+					this.SendPropertyChanged("Message");
+					this.OnMessageChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Timestamp", DbType="DateTime NOT NULL")]
+		public System.DateTime Timestamp
+		{
+			get
+			{
+				return this._Timestamp;
+			}
+			set
+			{
+				if ((this._Timestamp != value))
+				{
+					this.OnTimestampChanging(value);
+					this.SendPropertyChanging();
+					this._Timestamp = value;
+					this.SendPropertyChanged("Timestamp");
+					this.OnTimestampChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsRead", DbType="Bit")]
+		public System.Nullable<bool> IsRead
+		{
+			get
+			{
+				return this._IsRead;
+			}
+			set
+			{
+				if ((this._IsRead != value))
+				{
+					this.OnIsReadChanging(value);
+					this.SendPropertyChanging();
+					this._IsRead = value;
+					this.SendPropertyChanged("IsRead");
+					this.OnIsReadChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="users_table_Notification", Storage="_users_table", ThisKey="SenderID", OtherKey="UserID", IsForeignKey=true)]
+		public users_table users_table
+		{
+			get
+			{
+				return this._users_table.Entity;
+			}
+			set
+			{
+				users_table previousValue = this._users_table.Entity;
+				if (((previousValue != value) 
+							|| (this._users_table.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._users_table.Entity = null;
+						previousValue.Notifications.Remove(this);
+					}
+					this._users_table.Entity = value;
+					if ((value != null))
+					{
+						value.Notifications.Add(this);
+						this._SenderID = value.UserID;
+					}
+					else
+					{
+						this._SenderID = default(string);
+					}
+					this.SendPropertyChanged("users_table");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

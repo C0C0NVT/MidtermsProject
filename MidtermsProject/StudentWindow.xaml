@@ -1,62 +1,160 @@
 ﻿<Window x:Class="MidtermsProject.StudentWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MidtermsProject"
-        mc:Ignorable="d"
-        Title="Student Portal" Height="450" Width="800"
+        Title="Student Portal" Height="800" Width="1440"
         WindowStartupLocation="CenterScreen">
-    <Grid Background="#FF2D2D30">
+    <Grid Background="#FFCBCACF">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0" Background="#FF0078D7" Height="60">
-            <Label Content="NORTHVILLE UNIVERSITY" 
-                   Foreground="White" 
-                   FontSize="16" 
-                   FontWeight="Bold"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-            <Label Content="Student Portal" 
-                   Foreground="White" 
-                   FontSize="14"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-        </StackPanel>
+        <Border Grid.Row="0" Background="#640481" Padding="15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="NORTHVILLE UNIVERSITY" 
+                          Foreground="#FFD7D5E4" FontSize="18" FontWeight="Bold"
+                          VerticalAlignment="Center" FontFamily="Lucida Bright"/>
+
+                <TextBlock x:Name="WelcomeTextBlock" Grid.Column="1" 
+                          Foreground="#FFD7D5E4" FontSize="16"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="NotificationButton" Content="🔔" 
+                            Background="Transparent" Foreground="#FFD7D5E4"
+                            FontSize="16" Width="40" Height="40"
+                            Click="NotificationButton_Click"/>
+                    <Button Content="Logout" Width="80" Click="LogoutButton_Click"
+                            Margin="10,0,0,0" Background="#020005" Foreground="#FFD7D5E4" FontFamily="Lucida Bright"/>
+                </StackPanel>
+            </Grid>
+        </Border>
 
         <!-- Main Content -->
-        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Label Content="Welcome, Student!" 
-                   Foreground="White" 
-                   FontSize="24"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,30"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <Button Content="View Borrowed Books" 
-                    Width="200" 
-                    Height="30" 
-                    Margin="0,10"/>
-            <Button Content="View Fines" 
-                    Width="200" 
-                    Height="30" 
-                    Margin="0,10"/>
-            <Button Content="Search Library Catalog" 
-                    Width="200" 
-                    Height="30" 
-                    Margin="0,10"/>
-        </StackPanel>
+            <!-- Sidebar -->
+            <Border Grid.Column="0" Background="#020005">
+                <StackPanel>
+                    <TextBlock Text="Menu" Foreground="#FFD7D5E4" Margin="10" FontWeight="Bold" FontFamily="Lucida Bright"/>
+                    <Button Content="My Profile" Click="ProfileButton_Click" Style="{StaticResource MenuButtonStyle}" FontFamily="Lucida Bright"/>
+                    <Button Content="Borrowed Books" Click="BorrowedBooksButton_Click" Style="{StaticResource MenuButtonStyle}" FontFamily="Lucida Bright"/>
+                    <Button Content="Library Catalog" Click="CatalogButton_Click" Style="{StaticResource MenuButtonStyle}" FontFamily="Lucida Bright"/>
+                </StackPanel>
+            </Border>
 
-        <!-- Footer -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button Content="Logout" 
-                    Width="80" 
-                    Click="LogoutButton_Click"
-                    Margin="0,0,10,0"/>
-        </StackPanel>
+            <!-- Content Area -->
+            <TabControl Grid.Column="1" Background="#e0cddc" SelectionChanged="TabControl_SelectionChanged">
+                <TabItem x:Name="ProfileTab" Header="My Profile" Opacity="0">
+                    <ScrollViewer>
+                        <StackPanel Margin="20">
+                            <TextBlock Text="Student Information" FontSize="20" FontWeight="Bold" Margin="0,0,0,20" FontFamily="Lucida Bright"/>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Student ID:" Margin="5" FontFamily="Lucida Bright" FontWeight="Bold"/>
+                                <TextBlock x:Name="StudentIDTextBlock" Grid.Row="0" Grid.Column="1" Margin="5" FontFamily="Lucida Bright"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name:" Margin="5" FontFamily="Lucida Bright" FontWeight="Bold"/>
+                                <TextBlock x:Name="NameTextBlock" Grid.Row="1" Grid.Column="1" Margin="5" FontFamily="Lucida Bright"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Course:" Margin="5" FontFamily="Lucida Bright" FontWeight="Bold"/>
+                                <ComboBox x:Name="CourseComboBox" Grid.Row="2" Grid.Column="1" Margin="5" DisplayMemberPath="CourseName" FontFamily="Lucida Bright" BorderBrush="White" SelectionChanged="CourseComboBox_SelectionChanged">
+                                    <ComboBox.Background>
+                                        <LinearGradientBrush EndPoint="0,1">
+                                            <GradientStop Color="#FFF0F0F0"/>
+                                            <GradientStop Color="White" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </ComboBox.Background>
+                                </ComboBox>
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Address:" Margin="5" FontFamily="Lucida Bright" FontWeight="Bold"/>
+                                <TextBox x:Name="AddressTextBox" Grid.Row="3" Grid.Column="1" Margin="5" FontFamily="Lucida Bright"/>
+
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Contact:" Margin="5" FontFamily="Lucida Bright" FontWeight="Bold"/>
+                                <TextBox x:Name="ContactTextBox" Grid.Row="4" Grid.Column="1" Margin="5" FontFamily="Lucida Bright"/>
+
+                                <Button Grid.Row="5" Grid.Column="1" Content="Save Changes" 
+                        HorizontalAlignment="Right" Width="120" Margin="5"
+                        Click="SaveProfileButton_Click" FontFamily="Lucida Bright"/>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem x:Name="BorrowedBooksTab" Header="Borrowed Books" Visibility="Collapsed" Opacity="0">
+                    <StackPanel>
+                        <Button x:Name="ReturnBookButton" Content="Return Selected Book" 
+                                Click="ReturnBookButton_Click" Margin="10" Width="150"
+                                HorizontalAlignment="Left"/>
+                        <DataGrid x:Name="BorrowedBooksDataGrid" Margin="10" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                                <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
+                                <DataGridTextColumn Header="Borrow Date" Binding="{Binding BorrowDate, StringFormat={}{0:MM/dd/yyyy}}"/>
+                                <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat={}{0:MM/dd/yyyy}}"/>
+                                <DataGridTextColumn Header="Status" Binding="{Binding StatusName}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem x:Name="CatalogTab" Header="Library Catalog" Visibility="Collapsed" Opacity="0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="10">
+                            <Button x:Name="BorrowBookButton" Content="Borrow Selected Book" 
+                    Click="BorrowBookButton_Click" Width="150"/>
+                            <Button x:Name="RefreshCatalogButton" Content="Refresh" 
+                    Click="RefreshCatalogButton_Click" Margin="10,0,0,0" Width="80"
+                    Background="#640481" Foreground="White"/>
+                        </StackPanel>
+                        <DataGrid x:Name="AvailableBooksDataGrid" Margin="10" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                                <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
+                                <DataGridTextColumn Header="Year" Binding="{Binding PublicationYear}"/>
+                                <DataGridTextColumn Header="Available" Binding="{Binding AvailableCopies}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+
+            <!-- Notification Panel -->
+            <Border x:Name="NotificationPanel" Grid.Column="1" 
+                    Background="#FFFFFF" Width="300" Height="200"
+                    HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Margin="10" Visibility="Collapsed" BorderBrush="#640481" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="Send Message to Admin" FontWeight="Bold" Margin="5"/>
+                    <TextBox x:Name="NotificationTextBox" Margin="5" Height="100" AcceptsReturn="True"/>
+                    <Button Content="Send" Click="SendNotification_Click" 
+                            Background="#640481" Foreground="White" Margin="5"/>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

@@ -56,8 +56,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddEditBookWindow.xaml.cs">
+      <DependentUpon>AddEditBookWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddEditCourseWindow.xaml.cs">
+      <DependentUpon>AddEditCourseWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AdminWindow.xaml.cs">
       <DependentUpon>AdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreateAccountWindow.xaml.cs">
+      <DependentUpon>CreateAccountWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="LibrarianWindow.xaml.cs">
       <DependentUpon>LibrarianWindow.xaml</DependentUpon>
@@ -70,7 +79,22 @@
     <Compile Include="StudentWindow.xaml.cs">
       <DependentUpon>StudentWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UpdateTransactionWindow.xaml.cs">
+      <DependentUpon>UpdateTransactionWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AddEditBookWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddEditCourseWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AdminWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateAccountWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -91,6 +115,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="StudentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateTransactionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -131,6 +159,21 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="w label.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="w_o label logo only.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="w label %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="plain bg.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

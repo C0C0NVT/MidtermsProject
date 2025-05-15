@@ -33,5 +33,38 @@ namespace MidtermsProject.Properties {
                 return ((string)(this["MIDTERMPROJECTConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=MidtermProject;Integrated Security=True")]
+        public string LibraryConnectionString {
+            get {
+                return ((string)(this["LibraryConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Setting {
+            get {
+                return ((string)(this["Setting"]));
+            }
+            set {
+                this["Setting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=LAPTOP-0CF0PPA4\\SQLEXPRESS;Initial Catalog=MidtermProject;Integrated " +
+            "Security=True;TrustServerCertificate=True")]
+        public string MidtermProjectConnectionString1 {
+            get {
+                return ((string)(this["MidtermProjectConnectionString1"]));
+            }
+        }
     }
 }

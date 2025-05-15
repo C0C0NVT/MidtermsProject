@@ -8,16 +8,10 @@ namespace MidtermsProject
 {
     public partial class MainWindow : Window
     {
-        private readonly User[] _users = new[]
-        {
-            new User("Juan", HashPassword("password123"), "student"),
-            new User("Angela", HashPassword("password456"), "librarian"),
-            new User("Jill", HashPassword("password789"), "admin")
-        };
-
         public MainWindow()
         {
             InitializeComponent();
+            UsernameTextBox.Focus();
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -31,31 +25,46 @@ namespace MidtermsProject
                 return;
             }
 
-            var user = _users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
-
-            if (user == null || !VerifyPassword(password, user.PasswordHash))
+            using (var db = new LibraryDataContextDataContext())
             {
-                ShowError("Invalid username or password");
-                return;
-            }
+                var user = db.users_tables.FirstOrDefault(u => u.UserID == username);
 
-            switch (user.Role.ToLower())
-            {
-                case "student":
-                    var studentWindow = new StudentWindow();
-                    studentWindow.Show();
-                    break;
-                case "librarian":
-                    var librarianWindow = new LibrarianWindow();
-                    librarianWindow.Show();
-                    break;
-                case "admin":
-                    var adminWindow = new AdminWindow();
-                    adminWindow.Show();
-                    break;
-            }
+                if (user == null)
+                {
+                    ShowError("User does not exist");
+                    return;
+                }
 
-            this.Close();
+                if (!VerifyPassword(password, user.UserPass))
+                {
+                    ShowError("Invalid password");
+                    return;
+                }
+
+                switch (user.UserRole.ToLower())
+                {
+                    case "student":
+                        var studentWindow = new StudentWindow(user);
+                        studentWindow.Show();
+                        break;
+                    case "librarian":
+                        var librarianWindow = new LibrarianWindow(user);
+                        librarianWindow.Show();
+                        break;
+                    case "admin":
+                        var adminWindow = new AdminWindow(user);
+                        adminWindow.Show();
+                        break;
+                }
+
+                this.Close();
+            }
+        }
+
+        private void CreateAccountButton_Click(object sender, RoutedEventArgs e)
+        {
+            var createAccountWindow = new CreateAccountWindow();
+            createAccountWindow.ShowDialog();
         }
 
         private void ShowError(string message)
@@ -64,7 +73,7 @@ namespace MidtermsProject
             ErrorTextBlock.Visibility = Visibility.Visible;
         }
 
-        private static string HashPassword(string password)
+        public static string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
             {
@@ -77,20 +86,6 @@ namespace MidtermsProject
         {
             var hashOfInput = HashPassword(inputPassword);
             return string.Equals(hashOfInput, storedHash, StringComparison.OrdinalIgnoreCase);
-        }
-    }
-
-    public class User
-    {
-        public string Username { get; }
-        public string PasswordHash { get; }
-        public string Role { get; }
-
-        public User(string username, string passwordHash, string role)
-        {
-            Username = username;
-            PasswordHash = passwordHash;
-            Role = role;
         }
     }
 }

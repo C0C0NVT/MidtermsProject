@@ -1,67 +1,71 @@
 ﻿<Window x:Class="MidtermsProject.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MidtermsProject"
-        mc:Ignorable="d"
         Title="Northville University Library System - Login" 
-        Height="350" Width="400"
+        Height="800" Width="1440"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
-    <Grid Background="#FF2D2D30">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/4.png"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Background="#FF0078D7" Height="60">
-            <Label Content="NORTHVILLE UNIVERSITY" 
-                   Foreground="White" 
-                   FontSize="16" 
-                   FontWeight="Bold"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-            <Label Content="Library System" 
-                   Foreground="White" 
-                   FontSize="14"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-        </StackPanel>
 
-        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+        <!-- Right Side - Login Form -->
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
+            <TextBlock Text="Sign In" 
+                       Foreground="#020005" 
+                       FontSize="28" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,30" FontFamily="Lucida Bright"/>
 
-            <Label Content="Login" 
-                   Foreground="White" 
-                   FontSize="18" 
-                   FontWeight="Bold" HorizontalContentAlignment="Center"
-                   />
+            <TextBox x:Name="UsernameTextBox" 
+                     Height="45" 
+                     Padding="10" 
+                     Margin="0,0,0,20"
+                     FontSize="16"
+                     Text=""/>
 
-            <Label Content="Username" Foreground="White" Margin="0,0,0,5"/>
-            <TextBox x:Name="UsernameTextBox" Height="30" Padding="5"/>
-
-            <Label Content="Password" Foreground="White" Margin="0,10,0,5"/>
-            <PasswordBox x:Name="PasswordBox" Height="30" Padding="5"/>
+            <PasswordBox x:Name="PasswordBox" 
+                         Height="45" 
+                         Padding="10" 
+                         Margin="0,0,0,20"
+                         FontSize="16"/>
 
             <Button x:Name="LoginButton" 
-                    Content="LOGIN" 
-                    Background="#FF0078D7" 
-                    Foreground="White"
+                    Content="Sign in" 
+                    Background="#640481" 
+                    Foreground="#FFD7D5E4"
                     FontWeight="Bold"
-                    Height="35" 
-                    Margin="0,20,0,0"
-                    Click="LoginButton_Click"/>
+                    FontSize="16"
+                    Height="50" 
+                    Margin="0,0,0,15"
+                    Click="LoginButton_Click" FontFamily="Lucida Bright"/>
+
+            <Button x:Name="CreateAccountButton"
+                    Content="Create account"
+                    Background="Transparent"
+                    Foreground="#640481"
+                    FontWeight="Bold"
+                    FontSize="14"
+                    Height="40"
+                    BorderBrush="#640481"
+                    BorderThickness="1"
+                    Click="CreateAccountButton_Click" FontFamily="Lucida Bright"/>
 
             <TextBlock x:Name="ErrorTextBlock" 
                        Foreground="Red" 
                        TextWrapping="Wrap"
-                       Margin="0,10,0,0"
+                       Margin="0,15,0,0"
+                       FontSize="14"
+                       HorizontalAlignment="Center"
                        Visibility="Collapsed"/>
         </StackPanel>
-
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
-            <Label Content="© 2025 Northville University" Foreground="LightGray" FontSize="10"/>
-        </StackPanel>
+        <TextBlock HorizontalAlignment="Center" Margin="0,559,0,0" TextWrapping="Wrap" Text="© Copyright Northville University 2025" VerticalAlignment="Top" Width="232" Grid.Column="1" FontFamily="Lucida Bright" Foreground="#FF353434"/>
     </Grid>
 </Window>

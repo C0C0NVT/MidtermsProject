@@ -1,0 +1,25 @@
+﻿<Window x:Class="MidtermsProject.AddEditCourseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add/Edit Course" Height="300" Width="400"
+        WindowStartupLocation="CenterScreen">
+    <Grid Background="#FFCBCACF" Margin="10">
+        <StackPanel>
+            <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}" 
+                      FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+
+            <Label Content="Course ID:" Foreground="#020005"/>
+            <TextBox x:Name="CourseIdTextBox" Margin="0,0,0,10"/>
+
+            <Label Content="Course Name:" Foreground="#020005"/>
+            <TextBox x:Name="CourseNameTextBox" Margin="0,0,0,20"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Cancel" Width="80" Margin="0,0,10,0" 
+                        Click="CancelButton_Click"/>
+                <Button Content="Save" Width="80" Background="#640481" 
+                        Foreground="#FFD7D5E4" Click="SaveButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
